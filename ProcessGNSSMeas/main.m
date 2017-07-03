@@ -9,8 +9,15 @@ clc;clear all; close(findall(0,'Type','figure'));
 % prFileName = 'pseudoranges_log_2016_08_22_14_45_50.txt'; %no duty cycling, with carrier phase
 %prFileName = 'workshop_trials01.txt';
 % SET UP FILE NAME:
-prFileName = 'pseudoranges_log_2017_05_01_13_50_52.txt'; %my Nexus9
+%prFileName = 'pseudoranges_log_2017_05_01_13_50_52.txt'; %my Nexus9 AD1 UoN FC site
 
+%prFileName = 'All_Obs.txt' %analysis for Didie%
+%prFileName = 'RAWfiltered_front.txt' %analysis for Didie%
+prFileName = 'RAWfiltered_all.txt' %analysis for Didie%
+%prFileName = 'RAWfiltered_b150.txt'
+
+%prFileName = '30.txt'
+%prFileName = 'pseudoranges_log_2017_05_02_14_09_22.txt'; %S8  
 %SET UP PATHS
 softPath = pwd;
 addpath(softPath);
@@ -61,12 +68,12 @@ if isempty(allGpsEph), return, end %uable to process without EPH
 [gnssMeas] = ProcessGnssMeas(gnssRaw);
 
 %% plot pseudoranges and pseudorange rates
-h1 = figure('Color','white','MenuBar','figure','Position',[0 0 HW_ScrSize(3) HW_ScrSize(4)]);
-[colors] = PlotPseudoranges(gnssMeas,prFileName);
-% h2 = figure('Color','white','MenuBar','figure','Position',[0 0 HW_ScrSize(3) HW_ScrSize(4)]);
-% PlotPseudorangeRates(gnssMeas,prFileName,colors);
-% h3 = figure('Color','white','MenuBar','figure','Position',[0 0 HW_ScrSize(3) HW_ScrSize(4)]);
-% PlotCno(gnssMeas,prFileName,colors);
+% %h1 = figure('Color','white','MenuBar','figure','Position',[0 0 HW_ScrSize(3) HW_ScrSize(4)]);
+% [colors] = PlotPseudoranges(gnssMeas,prFileName);
+%  h2 = figure('Color','white','MenuBar','figure','Position',[0 0 HW_ScrSize(3) HW_ScrSize(4)]);
+%  PlotPseudorangeRates(gnssMeas,prFileName,colors);
+%  h3 = figure('Color','white','MenuBar','figure','Position',[0 0 HW_ScrSize(3) HW_ScrSize(4)]);
+%  PlotCno(gnssMeas,prFileName,colors);
 
 %% compute WLS position and velocity
 gpsPvt = GpsWlsPvt(gnssMeas,allGpsEph);
@@ -82,16 +89,16 @@ PlotPvtStates(gpsPvt,prFileName);
 % if unknown, use Median llaDegDegM 
 
 %% Plot Accumulated Delta Range 
-if any(any(isfinite(gnssMeas.AdrM) & gnssMeas.AdrM~=0))
-    display('this phone has ICP data, check plots:');
-    [gnssMeas]= ProcessAdr(gnssMeas);
-    h6 = figure('Color','white','MenuBar','figure','Position',[0 0 HW_ScrSize(3) HW_ScrSize(4)]);
-    PlotAdr(gnssMeas,prFileName,colors);
-    [adrResid]= GpsAdrResiduals(gnssMeas,allGpsEph,param.llaTrueDegDegM);drawnow
-    h7 = figure('Color','white','MenuBar','figure','Position',[0 0 HW_ScrSize(3) HW_ScrSize(4)]);
-    PlotAdrResids(adrResid,gnssMeas,prFileName,colors);
-else display('no ICP data on this phone!');
-end
+% if any(any(isfinite(gnssMeas.AdrM) & gnssMeas.AdrM~=0))
+%     display('this phone has ICP data, check plots:');
+%     [gnssMeas]= ProcessAdr(gnssMeas);
+%     h6 = figure('Color','white','MenuBar','figure','Position',[0 0 HW_ScrSize(3) HW_ScrSize(4)]);
+%     PlotAdr(gnssMeas,prFileName,colors);
+%     [adrResid]= GpsAdrResiduals(gnssMeas,allGpsEph,param.llaTrueDegDegM);drawnow
+%     h7 = figure('Color','white','MenuBar','figure','Position',[0 0 HW_ScrSize(3) HW_ScrSize(4)]);
+%     PlotAdrResids(adrResid,gnssMeas,prFileName,colors);
+% else display('no ICP data on this phone!');
+% end
 
 %% end of ProcessGnssMeasScript
 rmpath(softPath)
